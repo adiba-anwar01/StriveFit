@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+.zigzag-line-custom {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 3px;
+  height: 100%;
+  background: repeating-linear-gradient(
+    to bottom,
+    #12f7ff,
+    #12f7ff 12px,
+    transparent 12px,
+    transparent 24px
+  );
+  transform: translateX(-50%);
+  animation: moveZigzag 3s linear infinite;
+  z-index: 0;
+  filter: drop-shadow(0 0 8px #12f7ff);
+}
+
+@keyframes moveZigzag {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 40px;
+  }
+}
