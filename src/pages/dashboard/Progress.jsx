@@ -36,13 +36,11 @@ const Progress = () => {
   const [newGoal, setNewGoal] = useState({ goalName: '', targetValue: '', goalType: 'weight' });
   const [timeframe, _setTimeframe] = useState('all'); 
 
-
   useEffect(() => {
     if (!user) return;
 
     const fetchData = async () => {
       try {
-
         const progressQ = query(
           collection(db, 'users', user.uid, 'progressHistory'),
           orderBy('date', 'asc')
@@ -75,7 +73,6 @@ const Progress = () => {
     fetchData();
   }, [user]);
 
-  
   // Fitness Calculator
   const calculateFitness = async () => {
     const { age, weight, chest, height, bodyFat } = fitnessInput;
@@ -120,7 +117,6 @@ const Progress = () => {
     await deleteDoc(doc(db, 'users', user.uid, 'progressHistory', id));
     setProgressData(prev => prev.filter(entry => entry.id !== id));
   };
-
 
   const addGoal = async () => {
     if (!newGoal.goalName || !newGoal.targetValue) return;
@@ -178,7 +174,7 @@ const Progress = () => {
               Add New Goal
             </h2>
 
-            <div className="flex gap-4 mb-4">
+            <div className="flex flex-wrap gap-4 mb-4">
               <input
                 type="text"
                 placeholder="Goal Name"
@@ -186,7 +182,7 @@ const Progress = () => {
                 onChange={e =>
                   setNewGoal({ ...newGoal, goalName: e.target.value })
                 }
-                className="bg-black border border-purple-600 p-2 rounded w-full"
+                className="bg-black border border-purple-600 p-2 rounded w-full sm:w-auto"
               />
 
               <input
@@ -196,7 +192,7 @@ const Progress = () => {
                 onChange={e =>
                   setNewGoal({ ...newGoal, targetValue: e.target.value })
                 }
-                className="bg-black border border-purple-600 p-2 rounded w-32"
+                className="bg-black border border-purple-600 p-2 rounded w-full sm:w-32"
               />
 
               <select
@@ -204,7 +200,7 @@ const Progress = () => {
                 onChange={e =>
                   setNewGoal({ ...newGoal, goalType: e.target.value })
                 }
-                className="bg-black border border-purple-600 p-2 rounded"
+                className="bg-black border border-purple-600 p-2 rounded w-full sm:w-auto"
               >
                 <option value="weight">Weight</option>
                 <option value="steps">Steps</option>
@@ -214,7 +210,7 @@ const Progress = () => {
               </select>
 
               <button
-                className="bg-purple-600 hover:bg-purple-700 px-4 rounded"
+                className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded w-full sm:w-auto"
                 onClick={addGoal}
               >
                 Add

@@ -51,40 +51,38 @@ const AttendanceChart = () => {
 return (
   <div className="min-h-screen pt-20 bg-gradient-to-b from-black via-gray-950 to-purple-950 text-white px-6">
 
-
     {/* ===== Page Heading ===== */}
     <h1 className="text-2xl md:text-3xl font-bold text-center text-purple-400 mb-6 tracking-wide">
       Attendance Dashboard
     </h1>
 
-{/* ===== Today's Attendance ===== */}
-<div className="max-w-3xl mx-auto mb-6 bg-gray-900/70 border border-purple-700 rounded-xl p-4 shadow-md">
-  <div className="flex justify-between items-center text-sm">
-    
-    <div>
-      <p className="text-purple-300 font-semibold">
-        Today's Attendance
-      </p>
-      <p className="text-gray-400 text-xs mt-1">
-        {today}
-      </p>
+    {/* ===== Today's Attendance ===== */}
+    <div className="max-w-3xl mx-auto mb-6 bg-gray-900/70 border border-purple-700 rounded-xl p-4 shadow-md">
+      <div className="flex justify-between items-center text-sm">
+        
+        <div>
+          <p className="text-purple-300 font-semibold">
+            Today's Attendance
+          </p>
+          <p className="text-gray-400 text-xs mt-1">
+            {today}
+          </p>
+        </div>
+
+        <span className="font-semibold text-sm">
+          {todayStatus === "Present" && (
+            <span className="text-green-400">Present</span>
+          )}
+          {todayStatus === "Absent" && (
+            <span className="text-red-400">Absent</span>
+          )}
+          {todayStatus === "Not Marked" && (
+            <span className="text-yellow-400">Not Marked</span>
+          )}
+        </span>
+
+      </div>
     </div>
-
-    <span className="font-semibold text-sm">
-      {todayStatus === "Present" && (
-        <span className="text-green-400">Present</span>
-      )}
-      {todayStatus === "Absent" && (
-        <span className="text-red-400">Absent</span>
-      )}
-      {todayStatus === "Not Marked" && (
-        <span className="text-yellow-400">Not Marked</span>
-      )}
-    </span>
-
-  </div>
-</div>
-
 
     {/* ===== Month Navigation ===== */}
     <div className="flex justify-center items-center gap-6 mb-6">
@@ -143,13 +141,14 @@ return (
           return (
             <div
               key={date}
-              className={`h-14 w-14 mx-auto bg-gray-800/60 rounded-md p-1 flex flex-col justify-between
+              className={`aspect-square max-w-full w-full sm:w-14 flex flex-col justify-between p-1 rounded-md
               hover:bg-gray-800 transition border
               ${
                 isToday
                   ? "border-purple-500 shadow-[0_0_6px_rgba(168,85,247,0.5)]"
                   : "border-gray-700"
               }`}
+              style={{ minWidth: "2rem" }}
             >
               {/* Day Number */}
               <span className="text-[11px] text-gray-300">
