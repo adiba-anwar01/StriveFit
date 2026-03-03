@@ -1,6 +1,6 @@
 // React Router imports
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useContext } from "react";
+import { useAuth } from "../context/UserContext";
 
 // Common layout components
 import Navbar from "../components/Navbar.jsx";
@@ -23,12 +23,13 @@ import Admin from "../pages/dashboard/admin/Admin.jsx";
 
 // Route protection & context
 import ProtectedRoute from "../components/ProtectedRoute.jsx";
-import { UserContext } from "../context/UserContext";
 
 function AppRouter() {
+  // Access logged-in user data and loading state from global context
+  const { userData, loading } = useAuth();
 
-  // Access logged-in user data from global context
-  const { userData } = useContext(UserContext);
+  // While auth is resolving, avoid rendering routes/navbar to prevent UI flicker
+  if (loading) return <div className="min-h-screen" />;
 
   // Redirect admin users away from homepage to admin dashboard
   const UserRoleRedirect = ({ children }) => {
@@ -40,12 +41,10 @@ function AppRouter() {
 
   return (
     <BrowserRouter>
-
       {/* Global notification system */}
       <Toaster richColors position="top-right" />
 
       <Routes>
-
         {/* ================= PUBLIC ROUTES ================= */}
         <Route
           path="/"

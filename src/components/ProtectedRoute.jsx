@@ -6,8 +6,13 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user, userData, loading } = useAuth();
   const location = useLocation();
 
-  // Show nothing while loading user data
-  if (loading) return null;
+
+  if (loading) {
+    console.log("ProtectedRoute: loading auth state...");
+    return null;
+  }
+
+  console.log("ProtectedRoute: user=", user, "userData=", userData);
 
   // Not logged in
   if (!user) {

@@ -22,25 +22,28 @@ const Navbar = () => {
   // =============================
 
   const navigate = useNavigate();
-  const { user, userData, setUser } = useContext(UserContext);
+  const { user, userData, setUser, loading } = useContext(UserContext);
 
   // =============================
   // Local State Management
   // =============================
 
-  const [visible, setVisible] = useState(false);        // Mobile drawer visibility
+  const [visible, setVisible] = useState(false); // Mobile drawer visibility
   const [profileOpen, setProfileOpen] = useState(false); // Profile dropdown visibility
-  const [loadingRole, setLoadingRole] = useState(true);  // Prevent rendering before role loads
+  const [loadingRole, setLoadingRole] = useState(true); // Prevent rendering before role loads
 
   // =============================
   // Effect: Handle Role Loading
   // =============================
 
   useEffect(() => {
-    if (userData || !user) {
+ 
+    if (!loading && (userData || !user)) {
       setLoadingRole(false);
+    } else {
+      setLoadingRole(true);
     }
-  }, [userData, user]);
+  }, [userData, user, loading]);
 
   // =============================
   // Logout Handler
@@ -48,7 +51,7 @@ const Navbar = () => {
 
   const logoutHandler = async () => {
     await signOut(auth);
-    setUser(null);
+    if (typeof setUser === "function") setUser(null);
     navigate("/");
     setVisible(false);
     setProfileOpen(false);
@@ -58,18 +61,15 @@ const Navbar = () => {
   // Helper: Get User Image
   // =============================
 
-  const getUserImage = () =>
-    userData?.photoURL || user?.photoURL || userLogo;
+  const getUserImage = () => userData?.photoURL || user?.photoURL || userLogo;
 
   // =============================
   // Desktop Navigation Renderer
   // =============================
 
   const renderDesktopLinks = () => {
-    if (loadingRole) return null;
-
-    // Guest View
-    if (!user) {
+   
+    if (!user && !loading) {
       return (
         <>
           <Link to="/" className="hover:text-purple-400 transition">
@@ -81,6 +81,65 @@ const Navbar = () => {
           >
             Login
           </Link>
+        </>
+      );
+    }
+
+
+    if (user && !userData) {
+      return (
+        <>
+          <Link to="/" className="hover:text-purple-400 transition">
+            Home
+          </Link>
+          <Link
+            to="/dashboard/diet"
+            className="hover:text-purple-400 transition"
+          >
+            Diet
+          </Link>
+          <Link
+            to="/dashboard/progress"
+            className="hover:text-purple-400 transition"
+          >
+            Progress
+          </Link>
+          <Link
+            to="/dashboard/subscription"
+            className="hover:text-purple-400 transition"
+          >
+            Attendance
+          </Link>
+
+          <div className="relative">
+            <img
+              src={getUserImage()}
+              alt="User"
+              onClick={() => setProfileOpen(!profileOpen)}
+              className="w-10 h-10 rounded-full object-cover cursor-pointer border-2 border-purple-600"
+            />
+
+            {profileOpen && (
+              <div className="absolute right-0 mt-2 w-40 bg-gray-900 border border-purple-600/50 rounded shadow-lg py-2">
+                <button
+                  onClick={() => {
+                    navigate("/dashboard/profile");
+                    setProfileOpen(false);
+                  }}
+                  className="flex items-center gap-2 w-full px-4 py-2 hover:bg-purple-600/20 text-left"
+                >
+                  <FaUser /> Profile
+                </button>
+
+                <button
+                  onClick={logoutHandler}
+                  className="flex items-center gap-2 w-full px-4 py-2 hover:bg-red-500/20 text-left text-red-400"
+                >
+                  <FaSignOutAlt /> Logout
+                </button>
+              </div>
+            )}
+          </div>
         </>
       );
     }
@@ -114,10 +173,16 @@ const Navbar = () => {
         <Link to="/dashboard/diet" className="hover:text-purple-400 transition">
           Diet
         </Link>
-        <Link to="/dashboard/progress" className="hover:text-purple-400 transition">
+        <Link
+          to="/dashboard/progress"
+          className="hover:text-purple-400 transition"
+        >
           Progress
         </Link>
-        <Link to="/dashboard/subscription" className="hover:text-purple-400 transition">
+        <Link
+          to="/dashboard/subscription"
+          className="hover:text-purple-400 transition"
+        >
           Attendance
         </Link>
 
@@ -132,7 +197,6 @@ const Navbar = () => {
 
           {profileOpen && (
             <div className="absolute right-0 mt-2 w-40 bg-gray-900 border border-purple-600/50 rounded shadow-lg py-2">
-              
               {/* Profile Button */}
               <button
                 onClick={() => {
@@ -199,7 +263,6 @@ const Navbar = () => {
       {/* ================= Mobile Drawer ================= */}
       {visible && (
         <div className="fixed inset-0 z-50">
-
           {/* Overlay */}
           <div
             className="absolute inset-0 bg-black/60"
@@ -208,12 +271,9 @@ const Navbar = () => {
 
           {/* Drawer Panel */}
           <div className="absolute right-0 top-0 h-full w-72 bg-gray-950 shadow-2xl border-l border-purple-600/40 flex flex-col">
-            
             {/* Drawer Header */}
             <div className="flex items-center justify-between p-4 border-b border-purple-600/40">
-              <h2 className="text-lg font-semibold text-purple-400">
-                Menu
-              </h2>
+              <h2 className="text-lg font-semibold text-purple-400">Menu</h2>
               <button onClick={() => setVisible(false)}>
                 <FaTimes />
               </button>
@@ -221,24 +281,101 @@ const Navbar = () => {
 
             {/* Drawer Links */}
             <div className="flex-1 p-4 space-y-4">
-
               {!user && (
                 <>
-                  <button onClick={() => { navigate("/"); setVisible(false); }} className="block w-full text-left">
+                  <button
+                    onClick={() => {
+                      navigate("/");
+                      setVisible(false);
+                    }}
+                    className="block w-full text-left"
+                  >
                     Home
                   </button>
-                  <button onClick={() => { navigate("/login"); setVisible(false); }} className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      navigate("/login");
+                      setVisible(false);
+                    }}
+                    className="flex items-center gap-2"
+                  >
                     <FaSignInAlt /> Login
+                  </button>
+                </>
+              )}
+
+              
+              {user && !userData && (
+                <>
+                  <button
+                    onClick={() => {
+                      navigate("/");
+                      setVisible(false);
+                    }}
+                    className="block w-full text-left"
+                  >
+                    Home
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigate("/dashboard/diet");
+                      setVisible(false);
+                    }}
+                    className="block w-full text-left"
+                  >
+                    Diet
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigate("/dashboard/progress");
+                      setVisible(false);
+                    }}
+                    className="block w-full text-left"
+                  >
+                    Progress
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigate("/dashboard/subscription");
+                      setVisible(false);
+                    }}
+                    className="block w-full text-left"
+                  >
+                    Attendance
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigate("/dashboard/profile");
+                      setVisible(false);
+                    }}
+                    className="flex items-center gap-2"
+                  >
+                    <FaUser /> Profile
+                  </button>
+                  <button
+                    onClick={logoutHandler}
+                    className="flex items-center gap-2 text-red-400"
+                  >
+                    <FaSignOutAlt /> Logout
                   </button>
                 </>
               )}
 
               {user && userData?.role === "admin" && (
                 <>
-                  <button onClick={() => { navigate("/dashboard/admin"); setVisible(false); }} className="block w-full text-left">
+                  <button
+                    onClick={() => {
+                      navigate("/dashboard/admin");
+                      setVisible(false);
+                    }}
+                    className="block w-full text-left"
+                  >
                     Admin
                   </button>
-                  <button onClick={logoutHandler} className="flex items-center gap-2 text-red-400">
+                  <button
+                    onClick={logoutHandler}
+                    className="flex items-center gap-2 text-red-400"
+                  >
                     <FaSignOutAlt /> Logout
                   </button>
                 </>
@@ -246,27 +383,59 @@ const Navbar = () => {
 
               {user && userData?.role === "user" && (
                 <>
-                  <button onClick={() => { navigate("/"); setVisible(false); }} className="block w-full text-left">
+                  <button
+                    onClick={() => {
+                      navigate("/");
+                      setVisible(false);
+                    }}
+                    className="block w-full text-left"
+                  >
                     Home
                   </button>
-                  <button onClick={() => { navigate("/dashboard/diet"); setVisible(false); }} className="block w-full text-left">
+                  <button
+                    onClick={() => {
+                      navigate("/dashboard/diet");
+                      setVisible(false);
+                    }}
+                    className="block w-full text-left"
+                  >
                     Diet
                   </button>
-                  <button onClick={() => { navigate("/dashboard/progress"); setVisible(false); }} className="block w-full text-left">
+                  <button
+                    onClick={() => {
+                      navigate("/dashboard/progress");
+                      setVisible(false);
+                    }}
+                    className="block w-full text-left"
+                  >
                     Progress
                   </button>
-                  <button onClick={() => { navigate("/dashboard/subscription"); setVisible(false); }} className="block w-full text-left">
+                  <button
+                    onClick={() => {
+                      navigate("/dashboard/subscription");
+                      setVisible(false);
+                    }}
+                    className="block w-full text-left"
+                  >
                     Attendance
                   </button>
-                  <button onClick={() => { navigate("/dashboard/profile"); setVisible(false); }} className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      navigate("/dashboard/profile");
+                      setVisible(false);
+                    }}
+                    className="flex items-center gap-2"
+                  >
                     <FaUser /> Profile
                   </button>
-                  <button onClick={logoutHandler} className="flex items-center gap-2 text-red-400">
+                  <button
+                    onClick={logoutHandler}
+                    className="flex items-center gap-2 text-red-400"
+                  >
                     <FaSignOutAlt /> Logout
                   </button>
                 </>
               )}
-
             </div>
           </div>
         </div>

@@ -6,6 +6,7 @@ import {
   auth,
   db,
   createUserWithEmailAndPassword,
+  signOut,
 } from "../config/Firebase";
 import { toast } from "sonner";
 
@@ -64,6 +65,8 @@ const Signup = () => {
         role: "user",
         createdAt: new Date(),
       });
+
+      await signOut(auth);
 
       toast.success("Signup successful!", { id: toastId });
       setForm({ name: "", email: "", password: "" });
