@@ -127,7 +127,7 @@ const Diet = () => {
   const [selectedMeals, setSelectedMeals] = useState([]);
   const [planPrice, setPlanPrice] = useState(0);
 
-  // ---------- Effect ----------
+  // Effect 
   // Recalculate plan whenever weight, age or goal changes
   useEffect(() => {
     const cal = calculateCalories(weight, age, goal);
@@ -147,7 +147,7 @@ const Diet = () => {
   const totalCarbs = selectedMeals.reduce((sum, meal) => sum + meal.carbs, 0);
   const totalFats = selectedMeals.reduce((sum, meal) => sum + meal.fats, 0);
 
-  // ---------- UI ----------
+  // UI
   return (
     <div className="min-h-screen pt-20 bg-gradient-to-b from-black via-gray-950 to-purple-950 text-white px-6">
       <motion.h1
@@ -159,7 +159,7 @@ const Diet = () => {
       </motion.h1>
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* ================= Left Panel - User Inputs ================= */}
+        {/* Left Panel - User Inputs */}
         <motion.div
           className="bg-gray-900 p-6 rounded-xl border border-purple-700 lg:col-span-1"
           initial={{ opacity: 0, x: -20 }}
@@ -207,7 +207,7 @@ const Diet = () => {
           </div>
         </motion.div>
 
-        {/* ================= Right Panel - Plan Details ================= */}
+        {/* Right Panel - Plan Details */}
         <motion.div
           className="lg:col-span-3 space-y-6"
           initial={{ opacity: 0, x: 20 }}
