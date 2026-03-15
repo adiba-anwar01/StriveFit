@@ -17,25 +17,17 @@ import {
 } from "react-icons/fa";
 
 const Navbar = () => {
-  // =============================
+  
   // Hooks & Context
-  // =============================
-
   const navigate = useNavigate();
   const { user, userData, setUser, loading } = useContext(UserContext);
 
-  // =============================
   // Local State Management
-  // =============================
-
   const [visible, setVisible] = useState(false); // Mobile drawer visibility
   const [profileOpen, setProfileOpen] = useState(false); // Profile dropdown visibility
   const [loadingRole, setLoadingRole] = useState(true); // Prevent rendering before role loads
 
-  // =============================
   // Effect: Handle Role Loading
-  // =============================
-
   useEffect(() => {
  
     if (!loading && (userData || !user)) {
@@ -45,10 +37,7 @@ const Navbar = () => {
     }
   }, [userData, user, loading]);
 
-  // =============================
   // Logout Handler
-  // =============================
-
   const logoutHandler = async () => {
     await signOut(auth);
     if (typeof setUser === "function") setUser(null);
@@ -57,16 +46,10 @@ const Navbar = () => {
     setProfileOpen(false);
   };
 
-  // =============================
   // Helper: Get User Image
-  // =============================
-
   const getUserImage = () => userData?.photoURL || user?.photoURL || userLogo;
 
-  // =============================
   // Desktop Navigation Renderer
-  // =============================
-
   const renderDesktopLinks = () => {
    
     if (!user && !loading) {
@@ -222,10 +205,7 @@ const Navbar = () => {
     );
   };
 
-  // =============================
   // Main Render
-  // =============================
-
   return (
     <motion.div
       initial={{ opacity: 0, y: -50 }}
@@ -234,7 +214,7 @@ const Navbar = () => {
       className="w-full fixed top-0 left-0 z-50 bg-[#18181F] px-4 py-1 shadow-md border-b border-[#7C3AED]/40
  flex items-center justify-between text-white"
     >
-      {/* ================= Logo Section ================= */}
+      {/* Logo Section */}
       <div className="flex items-center gap-2">
         <Link to="/">
           <img src={Logo} alt="Gym Logo" className="w-12 h-12 object-contain" />
@@ -248,19 +228,19 @@ const Navbar = () => {
         </Link>
       </div>
 
-      {/* ================= Desktop Navigation ================= */}
+      {/* Desktop Navigation */}
       <div className="hidden md:flex gap-6 items-center">
         {renderDesktopLinks()}
       </div>
 
-      {/* ================= Mobile Menu Toggle ================= */}
+      {/*  Mobile Menu Toggle */}
       <div className="md:hidden">
         <button onClick={() => setVisible(true)}>
           <FaBars size={22} />
         </button>
       </div>
 
-      {/* ================= Mobile Drawer ================= */}
+      {/*  Mobile Drawer */}
       {visible && (
         <div className="fixed inset-0 z-50">
           {/* Overlay */}
