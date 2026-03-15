@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 
-/* ================= AUTH ================= */
+/*  AUTH */
 import {
   getAuth,
   signOut,
@@ -10,7 +10,7 @@ import {
   updatePassword
 } from "firebase/auth";
 
-/* ================= FIRESTORE (MODERN) ================= */
+/* FIRESTORE (MODERN) */
 import {
   initializeFirestore,
   persistentLocalCache,
@@ -28,7 +28,7 @@ import {
   Timestamp
 } from "firebase/firestore";
 
-/* ================= REALTIME DATABASE ================= */
+/* REALTIME DATABASE  */
 import {
   getDatabase,
   ref,
@@ -40,7 +40,7 @@ import {
   child,
 } from "firebase/database";
 
-/* ================= STORAGE ================= */
+/* STORAGE */
 import {
   getStorage,
   uploadBytesResumable,
@@ -50,7 +50,7 @@ import {
 } from "firebase/storage";
 
 
-/* ================= FIREBASE CONFIG ================= */
+/* FIREBASE CONFIG */
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -61,11 +61,11 @@ const firebaseConfig = {
 };
 
 
-/* ================= INITIALIZE APP ================= */
+/* INITIALIZE APP  */
 const app = initializeApp(firebaseConfig);
 
 
-/* ================= SERVICES ================= */
+/* SERVICES */
 
 // Auth
 const auth = getAuth(app);
@@ -82,7 +82,7 @@ const database = getDatabase(app);
 const storage = getStorage(app);
 
 
-/* ================= EXPORTS ================= */
+/* EXPORTS */
 export {
   auth,
   createUserWithEmailAndPassword,
