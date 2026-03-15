@@ -45,7 +45,7 @@ function AppRouter() {
       <Toaster richColors position="top-right" />
 
       <Routes>
-        {/* ================= PUBLIC ROUTES ================= */}
+        {/* PUBLIC ROUTES */}
         <Route
           path="/"
           element={
@@ -77,7 +77,7 @@ function AppRouter() {
           }
         />
 
-        {/* ================= PROTECTED ROUTES ================= */}
+        {/* PROTECTED ROUTES */}
 
         {/* Admin-only dashboard */}
         <Route
